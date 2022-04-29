@@ -146,7 +146,7 @@ public class Board {
             field += "  |  ";
             for (int x = 0; x < width; x++)
             {
-                Cell cCell = cells[x][y];
+                Cell cCell = this.getCell(x, y);
                 if (cCell.isExposed())
                 {
                     if (cCell.isMine())
@@ -177,13 +177,13 @@ public class Board {
     
     public void markMine(int x, int y)
     {
-        Cell cCell = cells[x][y];
+        Cell cCell = this.getCell(x, y);
         cCell.toggleFlagged();
     }
     
     public String exposeCell(int x, int y)
     {
-        Cell cCell = cells[x][y];
+        Cell cCell = this.getCell(x, y);
         if (cCell.isExposed())
             return "";
         else
@@ -211,7 +211,7 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             {
-                Cell cell = this.getCells()[x][y];
+                Cell cell = this.getCell(x, y);
                 if (!cell.isExposed() && !cell.isFlagged())
                 {
                     return false;
@@ -228,7 +228,7 @@ public class Board {
     public ArrayList<Cell> getMarkedNeighbors(int x, int y)
     {
         ArrayList<Cell> markedCellList = new ArrayList<>();
-        Cell cCell = getCells()[x][y];
+        Cell cCell = this.getCell(x, y);
         if (cCell.isExposed())
         {
             //build neighbors
@@ -258,7 +258,7 @@ public class Board {
                 //check if neighbors is on board
                 if (this.isCellInbound(n[0], n[1]))
                 {
-                    Cell nCell = getCells()[n[0]][n[1]];
+                    Cell nCell = this.getCell(n[0], n[1]);
                     if (nCell.isFlagged())
                         markedCellList.add(nCell);
                 }
@@ -270,7 +270,7 @@ public class Board {
     public ArrayList<Cell> getHiddenNeighbors(int x, int y, boolean includeMarked)
     {
         ArrayList<Cell> hiddenCellList = new ArrayList<>();
-        Cell cCell = getCells()[x][y];
+        Cell cCell = this.getCell(x, y);
         //if (cCell.isExposed())
         if (true)
         {
@@ -301,7 +301,7 @@ public class Board {
                 //check if neighbors is on board
                 if (this.isCellInbound(n[0], n[1]))
                 {
-                    Cell nCell = getCells()[n[0]][n[1]];
+                    Cell nCell = this.getCell(n[0], n[1]);
                     if (!nCell.isExposed() && ((includeMarked && nCell.isFlagged()) || !nCell.isFlagged()))
                         hiddenCellList.add(nCell);
                 }
@@ -340,7 +340,7 @@ public class Board {
             //check if neighbors is on board
             if (this.isCellInbound(n[0], n[1]))
             {
-                Cell nCell = cells[n[0]][n[1]];
+                Cell nCell = this.getCell(n[0], n[1]);
                 this.exposeCell(n[0], n[1]);
             }
         }        
@@ -352,20 +352,20 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             { 
-                cells[x][y].setExposed(true);
+            	this.getCell(x, y).setExposed(true);
             }
         }
     }
     
     public Cell getBestGuess()
     {
-        Cell bCell = this.getCells()[0][0];
+        Cell bCell = this.getCell(0, 0);
         double bGuess = 1;
         for (int x = 0; x < width; x++)
         {        
             for (int y = 0; y < height; y++ )
             {
-                Cell cell = this.getCells()[x][y];
+                Cell cell = this.getCell(x, y);
                 //
                 if (cell.isExposed()  == true && cell.getProx() > 0)
                 {
@@ -376,10 +376,10 @@ public class Board {
                     double unMarkedMines = cell.getProx() - m;
                     
                     double guess = (unMarkedMines / unMarkedNeighbor);
-                    if (guess < bGuess && this.getCells()[x][y].isExposed())
+                    if (guess < bGuess && this.getCell(x, y).isExposed())
                     {
                         bGuess = guess;
-                        bCell = this.getCells()[x][y];
+                        bCell = this.getCell(x, y);
                     }
                 }
             }
@@ -413,7 +413,7 @@ public class Board {
         for(int[] n : nList)
         {  if (this.isCellInbound(n[0], n[1]))
             {
-                Cell gCell = cells[n[0]][n[1]]; 
+                Cell gCell = this.getCell(n[0], n[1]);
                 if (!gCell.isExposed() && !gCell.isFlagged())
                     return gCell;
             }
@@ -430,7 +430,7 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             {
-                Cell cell = this.getCells()[x][y];
+                Cell cell = this.getCell(x, y);
                 if(!cell.isExposed() && !cell.isFlagged())
                 {
                 	hCells.add(cell);
@@ -448,7 +448,7 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             {
-                Cell cell = this.getCells()[x][y];
+                Cell cell = this.getCell(x, y);
                 if (!cell.isFlagged() && !cell.isExposed()) {
 	                int[] n1 = new int[]{x-1,y-1};
 	                int[] n2 = new int[]{x,y-1};
@@ -475,7 +475,7 @@ public class Board {
 	                for(int[] n : nList)
 	                {  if (this.isCellInbound(n[0], n[1]))
 	                    {
-	                        Cell gCell = cells[n[0]][n[1]]; 
+	                        Cell gCell = this.getCell(n[0], n[1]);
 	                        if (gCell.isExposed())
 	                        	isIsolated = false;
 	                    }
@@ -557,7 +557,7 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             { 
-                if (cells[x][y].isFlagged())
+                if (this.getCell(x, y).isFlagged())
                     flaggedCells++;
             }
         }
@@ -601,8 +601,13 @@ public class Board {
     public void setMines(int mines) {
         this.mines = mines;
     }
+    
+    public Cell getCell(int x ,int y)
+    {
+    	return cells[x][y];
+    }
 
-    public Cell[][] getCells() {
+    public Cell[][] xgetCells() {
         return cells;
     }
 
@@ -619,7 +624,7 @@ public class Board {
         {        
             for (int y = 0; y < height; y++ )
             {
-                Cell cell = this.getCells()[x][y];
+                Cell cell = this.getCell(x, y);
                 int codeValue = 0;
                 if (cell.isMine())
                 {

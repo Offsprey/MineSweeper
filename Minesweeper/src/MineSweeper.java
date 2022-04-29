@@ -28,7 +28,7 @@ public class MineSweeper {
         int notFinished = 0;
         for(int i = 0; i < 1000; i++)
         {
-            int result = solveGame(16,16,40,5,5);
+            int result = solveGame(16,17,40,5,5);
             
             switch(result)
             {
@@ -232,8 +232,11 @@ public class MineSweeper {
         {        
             for (int y = 0; y < height; y++ )
             {
-            	
-                Cell cCell = nBoard.getCells()[x][y];
+//            	Cell cCell1616 = nBoard.getCells()[16][16];       	
+//            	Cell cCell1617 = nBoard.getCells()[16][17];
+//            	Cell cCell1716 = nBoard.getCells()[17][16];
+//            	Cell cCell1717 = nBoard.getCells()[17][17];
+                Cell cCell = nBoard.getCell(x, y);
                 
                 
                 //doesnt catch cases where 2 mines in 2 
@@ -270,7 +273,8 @@ public class MineSweeper {
                         //check if neighbors is on board
                         if (nBoard.isCellInbound(n[0], n[1]))
                         {
-                            Cell nCell = nBoard.getCells()[n[0]][n[1]];
+                            
+                            Cell nCell = nBoard.getCell(n[0], n[1]);
                             //replace with flag cell
                             //if (!nCell.isExposed() && !nCell.isFlagged())
                             if (!nCell.isExposed())
@@ -304,14 +308,14 @@ public class MineSweeper {
     
     public Cell getBestGuess(Board board)
     {
-        Cell bCell = board.getCells()[0][0];
+        Cell bCell = board.getCell(0, 0);
         double bGuess = 1;
         for (int x = 0; x < board.getWidth(); x++)
         {        
             for (int y = 0; y < board.getHeight(); y++ )
             {
             	
-                Cell cell = board.getCells()[x][y];
+                Cell cell = board.getCell(x, y);
                 if (cell.isExposed()  == true && cell.getProx() > 0)
                 {
                     int m = board.getMarkedNeighbors(x, y).size();
@@ -321,10 +325,10 @@ public class MineSweeper {
                     double unMarkedMines = cell.getProx() - m;
                     
                     double guess = (unMarkedMines / unMarkedNeighbor);
-                    if (guess < bGuess && board.getCells()[x][y].isExposed())
+                    if (guess < bGuess && board.getCell(x, y).isExposed())
                     {
                         bGuess = guess;
-                        bCell = board.getCells()[x][y];
+                        bCell = board.getCell(x, y);
                     }
                 }
             }
@@ -358,7 +362,7 @@ public class MineSweeper {
         for(int[] n : nList)
         {  if (board.isCellInbound(n[0], n[1]))
             {
-                Cell gCell = board.getCells()[n[0]][n[1]]; 
+                Cell gCell = board.getCell(n[0], n[1]); 
                 if (!gCell.isExposed() && !gCell.isFlagged())
                     return gCell;
             }
@@ -374,7 +378,7 @@ public class MineSweeper {
             for (int y = 0; y < height; y++ )
             {
             	
-                Cell cCell = nBoard.getCells()[x][y];
+                Cell cCell = nBoard.getCell(x, y);
                 if (cCell.isExposed())
                 {
                     //build neighbors
@@ -405,7 +409,7 @@ public class MineSweeper {
                         //check if neighbors is on board
                         if (nBoard.isCellInbound(n[0], n[1]))
                         {
-                            Cell nCell = nBoard.getCells()[n[0]][n[1]];
+                            Cell nCell = nBoard.getCell(n[0], n[1]); 
                             if (nCell.isFlagged())
                                 markedCellList.add(nCell);
                         }
@@ -418,7 +422,7 @@ public class MineSweeper {
                             //check if neighbors is on board
                             if (nBoard.isCellInbound(n[0], n[1]))
                             {
-                                Cell nCell = nBoard.getCells()[n[0]][n[1]];
+                                Cell nCell = nBoard.getCell(n[0], n[1]); 
                                 if (!nCell.isFlagged() && !nCell.isExposed())
                                 {
                                     System.out.println("Exposing : " + 
