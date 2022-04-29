@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /*
 Shane Neal : SpreSoft
  */
@@ -50,6 +52,33 @@ public class Cell {
 
     public void setProx(int prox) {
         this.prox = prox;
+    }
+    
+    public static ArrayList<int[]> getProxCoords(int x, int y)
+    {
+    	    	
+    	//build neighbors
+        int[] n1 = new int[]{x-1,y-1};
+        int[] n2 = new int[]{x,y-1};
+        int[] n3 = new int[]{x+1,y-1};
+        int[] n4 = new int[]{x+1,y};
+        int[] n5 = new int[]{x+1,y+1};
+        int[] n6 = new int[]{x,y+1};
+        int[] n7 = new int[]{x-1,y+1};
+        int[] n8 = new int[]{x-1,y};
+        
+        ArrayList<int[]> nList = new ArrayList<>();
+        
+        nList.add(n1);
+        nList.add(n2);
+        nList.add(n3);
+        nList.add(n4);
+        nList.add(n5);
+        nList.add(n6);
+        nList.add(n7);
+        nList.add(n8);
+        
+        return nList;
     }
     
     public boolean isMine() {

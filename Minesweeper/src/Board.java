@@ -16,8 +16,6 @@ public class Board {
     private int width;
     private int mines;
     private Cell[][] cells;
-    private int seedX;
-    private int seedY;
     private int gameStatus;
 
     public Board(int width, int height, int mines) {
@@ -25,10 +23,7 @@ public class Board {
         this.width = width;
         this.mines = mines;
         
-        seedX = -1;
-        seedY = -1;
-        
-        buildboard();  
+        buildBoard();  
         gameStatus = 0;
     }
 
@@ -36,12 +31,10 @@ public class Board {
         this.height = height;
         this.width = width;
         this.mines = mines;
-        this.seedX = seedX;
-        this.seedY = seedY;
         boolean seeded = false;
         while (!seeded)
         {
-            buildboard();
+            buildBoard();
             Cell cCell = cells[seedX][seedY];
             //Make sure board is correctly built
             if (cCell.getProx() == 0 && !cCell.isMine())
@@ -50,7 +43,7 @@ public class Board {
         gameStatus = 0;
     }
     
-    private void buildboard()
+    private void buildBoard()
     {
     	//cells = new Cell[height][width];
         cells = new Cell[width][height];
@@ -84,25 +77,7 @@ public class Board {
             {
                 //build neighbors
                 Cell cCell = cells[x][y];
-                int[] n1 = new int[]{x-1,y-1};
-                int[] n2 = new int[]{x,y-1};
-                int[] n3 = new int[]{x+1,y-1};
-                int[] n4 = new int[]{x+1,y};
-                int[] n5 = new int[]{x+1,y+1};
-                int[] n6 = new int[]{x,y+1};
-                int[] n7 = new int[]{x-1,y+1};
-                int[] n8 = new int[]{x-1,y};
-                
-                ArrayList<int[]> nList = new ArrayList<>();
-                
-                nList.add(n1);
-                nList.add(n2);
-                nList.add(n3);
-                nList.add(n4);
-                nList.add(n5);
-                nList.add(n6);
-                nList.add(n7);
-                nList.add(n8);
+                ArrayList<int[]> nList = Cell.getProxCoords(x, y);
                 
                 int prox = 0;
                 for(int[] n : nList)
@@ -230,29 +205,9 @@ public class Board {
         ArrayList<Cell> markedCellList = new ArrayList<>();
         Cell cCell = this.getCell(x, y);
         if (cCell.isExposed())
-        {
-            //build neighbors
-            int[] n1 = new int[]{x-1,y-1};
-            int[] n2 = new int[]{x,y-1};
-            int[] n3 = new int[]{x+1,y-1};
-            int[] n4 = new int[]{x+1,y};
-            int[] n5 = new int[]{x+1,y+1};
-            int[] n6 = new int[]{x,y+1};
-            int[] n7 = new int[]{x-1,y+1};
-            int[] n8 = new int[]{x-1,y};
+        {            
+            ArrayList<int[]> nList = Cell.getProxCoords(x, y);
 
-            ArrayList<int[]> nList = new ArrayList<>();
-
-            nList.add(n1);
-            nList.add(n2);
-            nList.add(n3);
-            nList.add(n4);
-            nList.add(n5);
-            nList.add(n6);
-            nList.add(n7);
-            nList.add(n8);
-
-            int prox = 0;
             for(int[] n : nList)
             {                    
                 //check if neighbors is on board
@@ -270,32 +225,11 @@ public class Board {
     public ArrayList<Cell> getHiddenNeighbors(int x, int y, boolean includeMarked)
     {
         ArrayList<Cell> hiddenCellList = new ArrayList<>();
-        Cell cCell = this.getCell(x, y);
         //if (cCell.isExposed())
         if (true)
         {
-            //build neighbors
-            int[] n1 = new int[]{x-1,y-1};
-            int[] n2 = new int[]{x,y-1};
-            int[] n3 = new int[]{x+1,y-1};
-            int[] n4 = new int[]{x+1,y};
-            int[] n5 = new int[]{x+1,y+1};
-            int[] n6 = new int[]{x,y+1};
-            int[] n7 = new int[]{x-1,y+1};
-            int[] n8 = new int[]{x-1,y};
+            ArrayList<int[]> nList = Cell.getProxCoords(x, y);
 
-            ArrayList<int[]> nList = new ArrayList<>();
-
-            nList.add(n1);
-            nList.add(n2);
-            nList.add(n3);
-            nList.add(n4);
-            nList.add(n5);
-            nList.add(n6);
-            nList.add(n7);
-            nList.add(n8);
-
-            int prox = 0;
             for(int[] n : nList)
             {                    
                 //check if neighbors is on board
@@ -313,34 +247,13 @@ public class Board {
     
     public void exposeNeighbors(int x, int y)
     {
-        //build neighbors
-        Cell cCell = cells[x][y];
-        int[] n1 = new int[]{x-1,y-1};
-        int[] n2 = new int[]{x,y-1};
-        int[] n3 = new int[]{x+1,y-1};
-        int[] n4 = new int[]{x+1,y};
-        int[] n5 = new int[]{x+1,y+1};
-        int[] n6 = new int[]{x,y+1};
-        int[] n7 = new int[]{x-1,y+1};
-        int[] n8 = new int[]{x-1,y};
-
-        ArrayList<int[]> nList = new ArrayList<>();
-
-        nList.add(n1);
-        nList.add(n2);
-        nList.add(n3);
-        nList.add(n4);
-        nList.add(n5);
-        nList.add(n6);
-        nList.add(n7);
-        nList.add(n8);
+    	ArrayList<int[]> nList = Cell.getProxCoords(x, y);
         
         for(int[] n : nList)
         {                    
             //check if neighbors is on board
             if (this.isCellInbound(n[0], n[1]))
             {
-                Cell nCell = this.getCell(n[0], n[1]);
                 this.exposeCell(n[0], n[1]);
             }
         }        
@@ -390,25 +303,7 @@ public class Board {
         int x = bCell.getCellId()[0];
         int y = bCell.getCellId()[1];
         
-        int[] n1 = new int[]{x-1,y-1};
-        int[] n2 = new int[]{x,y-1};
-        int[] n3 = new int[]{x+1,y-1};
-        int[] n4 = new int[]{x+1,y};
-        int[] n5 = new int[]{x+1,y+1};
-        int[] n6 = new int[]{x,y+1};
-        int[] n7 = new int[]{x-1,y+1};
-        int[] n8 = new int[]{x-1,y};
-
-        ArrayList<int[]> nList = new ArrayList<>();
-
-        nList.add(n1);
-        nList.add(n2);
-        nList.add(n3);
-        nList.add(n4);
-        nList.add(n5);
-        nList.add(n6);
-        nList.add(n7);
-        nList.add(n8);
+        ArrayList<int[]> nList = Cell.getProxCoords(x, y);
         
         for(int[] n : nList)
         {  if (this.isCellInbound(n[0], n[1]))
@@ -450,25 +345,7 @@ public class Board {
             {
                 Cell cell = this.getCell(x, y);
                 if (!cell.isFlagged() && !cell.isExposed()) {
-	                int[] n1 = new int[]{x-1,y-1};
-	                int[] n2 = new int[]{x,y-1};
-	                int[] n3 = new int[]{x+1,y-1};
-	                int[] n4 = new int[]{x+1,y};
-	                int[] n5 = new int[]{x+1,y+1};
-	                int[] n6 = new int[]{x,y+1};
-	                int[] n7 = new int[]{x-1,y+1};
-	                int[] n8 = new int[]{x-1,y};
-	
-	                ArrayList<int[]> nList = new ArrayList<>();
-	
-	                nList.add(n1);
-	                nList.add(n2);
-	                nList.add(n3);
-	                nList.add(n4);
-	                nList.add(n5);
-	                nList.add(n6);
-	                nList.add(n7);
-	                nList.add(n8);
+                	ArrayList<int[]> nList = Cell.getProxCoords(x, y);
 	                
 	                boolean isIsolated = true;
                 
@@ -607,11 +484,8 @@ public class Board {
     	return cells[x][y];
     }
 
-    public Cell[][] xgetCells() {
-        return cells;
-    }
-
-    public void setCells(Cell[][] cells) {
+    public void setCells(Cell[][] cells) 
+    {
         this.cells = cells;
     }
     

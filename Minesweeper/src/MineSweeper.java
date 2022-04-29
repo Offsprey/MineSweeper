@@ -25,16 +25,14 @@ public class MineSweeper {
         int ex = 0;
         int gex = 0;
         int error = 0;
-        int notFinished = 0;
         for(int i = 0; i < 1000; i++)
         {
-            int result = solveGame(16,17,40,5,5);
+            int result = solveGame(16,16,40,5,5);
             
             switch(result)
             {
                 case 0:
                     System.out.print("Not Finished");
-                    notFinished++;
                     break;
                 case 1:
                     System.out.print("Won without guessing");
@@ -140,14 +138,7 @@ public class MineSweeper {
             {
             	int test = 0;
             }
-            // 
-//            if (nBoard.getFlaggedCells() == 40)
-//            {
-//                int test = 0;
-//                nBoard.gameOver();
-//                test = 1;
-//            }
-            // 
+
             if (progress == 0 && nBoard.gameOver() == false)
             {
                 guessed = true;
@@ -244,30 +235,10 @@ public class MineSweeper {
                 //if (cCell.isExposed() && (cCell.getProx() - markedCells) == 1)
                 if (cCell.isExposed() && (cCell.getProx() == nBoard.getHiddenNeighbors(x, y, true).size()))
                 {
-                    
-                    //build neighbors
-                    int[] n1 = new int[]{x-1,y-1};
-                    int[] n2 = new int[]{x,y-1};
-                    int[] n3 = new int[]{x+1,y-1};
-                    int[] n4 = new int[]{x+1,y};
-                    int[] n5 = new int[]{x+1,y+1};
-                    int[] n6 = new int[]{x,y+1};
-                    int[] n7 = new int[]{x-1,y+1};
-                    int[] n8 = new int[]{x-1,y};
-
-                    ArrayList<int[]> nList = new ArrayList<>();
+                   
                     ArrayList<Cell> hiddenCellList = new ArrayList<>();
+                    ArrayList<int[]> nList = Cell.getProxCoords(x, y);
 
-                    nList.add(n1);
-                    nList.add(n2);
-                    nList.add(n3);
-                    nList.add(n4);
-                    nList.add(n5);
-                    nList.add(n6);
-                    nList.add(n7);
-                    nList.add(n8);
-
-                    int prox = 0;
                     for(int[] n : nList)
                     {                    
                         //check if neighbors is on board
@@ -339,25 +310,7 @@ public class MineSweeper {
         int x = bCell.getCellId()[0];
         int y = bCell.getCellId()[1];
         
-        int[] n1 = new int[]{x-1,y-1};
-        int[] n2 = new int[]{x,y-1};
-        int[] n3 = new int[]{x+1,y-1};
-        int[] n4 = new int[]{x+1,y};
-        int[] n5 = new int[]{x+1,y+1};
-        int[] n6 = new int[]{x,y+1};
-        int[] n7 = new int[]{x-1,y+1};
-        int[] n8 = new int[]{x-1,y};
-
-        ArrayList<int[]> nList = new ArrayList<>();
-
-        nList.add(n1);
-        nList.add(n2);
-        nList.add(n3);
-        nList.add(n4);
-        nList.add(n5);
-        nList.add(n6);
-        nList.add(n7);
-        nList.add(n8);
+        ArrayList<int[]> nList = Cell.getProxCoords(x, y);
         
         for(int[] n : nList)
         {  if (board.isCellInbound(n[0], n[1]))
@@ -381,29 +334,10 @@ public class MineSweeper {
                 Cell cCell = nBoard.getCell(x, y);
                 if (cCell.isExposed())
                 {
-                    //build neighbors
-                    int[] n1 = new int[]{x-1,y-1};
-                    int[] n2 = new int[]{x,y-1};
-                    int[] n3 = new int[]{x+1,y-1};
-                    int[] n4 = new int[]{x+1,y};
-                    int[] n5 = new int[]{x+1,y+1};
-                    int[] n6 = new int[]{x,y+1};
-                    int[] n7 = new int[]{x-1,y+1};
-                    int[] n8 = new int[]{x-1,y};
-
-                    ArrayList<int[]> nList = new ArrayList<>();
+                    
                     ArrayList<Cell> markedCellList = new ArrayList<>();
+                    ArrayList<int[]> nList = Cell.getProxCoords(x, y);
 
-                    nList.add(n1);
-                    nList.add(n2);
-                    nList.add(n3);
-                    nList.add(n4);
-                    nList.add(n5);
-                    nList.add(n6);
-                    nList.add(n7);
-                    nList.add(n8);
-
-                    int prox = 0;
                     for(int[] n : nList)
                     {                    
                         //check if neighbors is on board
