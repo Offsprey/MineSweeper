@@ -27,7 +27,7 @@ public class Board {
         gameStatus = 0;
     }
 
-    public Board(int height, int width, int mines, int seedX, int seedY) {
+    public Board(int width, int height, int mines, int seedX, int seedY) {
         this.height = height;
         this.width = width;
         this.mines = mines;
@@ -481,7 +481,17 @@ public class Board {
     
     public Cell getCell(int x ,int y)
     {
-    	return cells[x][y];
+    	Cell[] yCells = cells[x];
+    	try {
+    		return cells[x][y];
+    	}
+    	catch (Exception ex)
+    	{
+    		int test = 0;
+    	}
+    	
+    	return null;
+    	
     }
 
     public void setCells(Cell[][] cells) 

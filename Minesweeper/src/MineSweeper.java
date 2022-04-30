@@ -27,7 +27,7 @@ public class MineSweeper {
         int error = 0;
         for(int i = 0; i < 1000; i++)
         {
-            int result = solveGame(16,16,40,5,5);
+            int result = solveGame(19,16,40,5,5);
             
             switch(result)
             {
